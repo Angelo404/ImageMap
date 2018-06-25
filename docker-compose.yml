@@ -1,0 +1,44 @@
+version: "2" # specify docker-compose version
+
+# Define the services/containers to be run
+services:
+  angular: # name of the first service
+    build: client # specify the directory of the Dockerfile
+    volumes:
+      - ./client/src:/usr/src/app/src
+      - ./client/angular-cli.json:/usr/src/app/angular-cli.json
+      - ./client/tslint.json:/usr/src/app/tslint.json
+    ports:
+      - "4200:4200" # specify port forewarding
+
+  server: #name of the second service
+    build: server # specify the directory of the Dockerfile
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./server/tests:/usr/src/app/tests
+      - ./server/src:/usr/src/app/src
+      - ./server/resources:/usr/src/app/resources
+      - ./server/package.json:/usr/src/app/package.json
+    ports:
+      - "3000:3000" #specify ports forewarding
+    depends_on:
+      - database
+    links:
+      - database # link this service to the database service
+
+  database:
+    image: postgres:9.4.1
+    ports:
+      - "5432:5432"
+    restart: always
+    # volumes:
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/1-init.sql
+      # - ./data/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=supersecret
+      - POSTGRES_USER=username
+      - POSTGRES_DB=dbname
+
+    

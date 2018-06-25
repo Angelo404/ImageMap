@@ -1,0 +1,36 @@
+<div id="mapid" class="container-fluid" style="height: 100%; position: absolute; left: 0px; padding-bottom: 100px; margin-bottom: 100px;">
+
+    <div class="leaflet-bottom">
+        <input type="button" id="Btn1" value="Get New Images" onclick="getNew()" class="btnStyle span3 leaflet-control" />
+        <input type="button" id="Btn2" value="Technology Stack" onclick="SaveRoutes()" class="btnStyle span3 leaflet-control" data-toggle="modal" data-target="#exampleModalCenter"/> 
+        <span id="studentsCount" class="lblStyle span3 leaflet-control"> Images on Screen: {{_imagesOnScreen}}</span>
+    </div>
+
+</div>
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Technology Stack</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img src="./../../../assets/images/angularlogo.png" style="padding: 5px; height: 50px;">
+          <img src="./../../../assets/images/gulp.png" style="padding: 5px; height: 50px;">
+          <img src="./../../../assets/images/koajs.png" style="padding: 5px; height: 50px;">
+          <img src="./../../../assets/images/leaflet.png" style="padding: 5px; height: 50px;">
+          <img src="./../../../assets/images/node.png" style="padding: 5px; height: 50px;">
+          <img src="./../../../assets/images/nodemon.png" style="margin-left: 10px; padding: 5px; height: 50px;">
+          <img src="./../../../assets/images/postgres.png" style="margin-left: 10px; padding: 5px; height: 50px;">
+          <img src="./../../../assets/images/html.svg" style="margin-left: 10px; padding: 5px; height: 75px;">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
