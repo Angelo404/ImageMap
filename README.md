@@ -14,3 +14,7 @@ Images are only shown after moving the map.
 #### KOA: for the API calls from the client to server.
 #### Docker: to containe the back/fron end and the database
 #### PostgreSQL: to hold the downloaded data
+
+
+![alt text](https://github.com/Angelo404/ImageMap/blob/master/img1.png?raw=true)
+![alt text](https://github.com/Angelo404/ImageMap/blob/master/img2.png?raw=true)
