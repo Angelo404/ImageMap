@@ -12,5 +12,5 @@ Images are only shown after moving the map.
 #### Leaflet: to display the map and the markers.
 #### Angular2 + Node.js: for the front and back end.
 #### KOA: for the API calls from the client to server.
-
-### Image
+#### Docker: to containe the back/fron end and the database
+#### PostgreSQL: to hold the downloaded data
