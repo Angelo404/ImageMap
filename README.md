@@ -17,3 +17,4 @@ Images are only shown after moving the map.
 
 
 ![alt text](https://github.com/Angelo404/ImageMap/blob/master/img1.png?raw=true)
+![alt text](https://github.com/Angelo404/ImageMap/blob/master/img2.png?raw=true)
