@@ -5,7 +5,6 @@ import { PhotoModel } from '../../models/PhotoModel.Interface';
 
 @Component({
   selector: 'app-main',
-  // template: '<div id="mapid" class="container-fluid" style="height: 100%; position: absolute; left: 0px;"></div>',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
@@ -63,6 +62,7 @@ export class MainComponent implements OnInit {
 
   public async getNew() {
     const result = this._service.getNewPointsOfInterest();
+    console.log(result);
   }
 
 

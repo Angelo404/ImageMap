@@ -18,7 +18,7 @@ export class FlickrAPI {
         const time = moment().unix() - 3600;
         const url = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${this.apiKey}&has_geo=1&min_upload_date=${time}&extras=geo,url_m,description,date_upload,owner_name,tags&accuracy=16&per_page=500`;
         const results = await this.executeCall(url);
-        xmlp.parseString(results, this.cleanData);
+        xmlp.parseString(results, (e,r) => {this.cleanData(r)});
     }
 
     public cleanData(result): void {
