@@ -21,28 +21,27 @@ export class FlickrAPI {
         xmlp.parseString(results, (e,r) => {this.cleanData(r)});
     }
 
-    public cleanData(result): void {
+    private cleanData(result): void {
         const photos = result.rsp.photos[0].photo;
         let cleanedData = Array<PhotoModel>();
         photos.forEach(photo => {
             const photoData = photo['$'];
             let photoDataCleaned = <PhotoModel>(({ id, owner, title, dateupload, ownername, tags, latitude, longitude, place_id, url_m }) => ({ id, owner, title, dateupload, ownername, tags, latitude, longitude, place_id, url_m }))(photoData);
-            console.log(photoDataCleaned);
             photoDataCleaned = FlickrAPI.replaceNull(photoDataCleaned);
             photoDataCleaned = FlickrAPI.addInsertationDate(photoDataCleaned);
             cleanedData.push(photoDataCleaned);            
         });
-        FlickrAPI.db.insertMany(cleanedData, 'flickr');
+        FlickrAPI.db.insertMany(cleanedData, 'FLICKR');
     }
 
-    public async executeCall(url: string): Promise<string> {
+    private async executeCall(url: string): Promise<string> {
         return new Promise<string>(async (resolve, reject) => {
             let response = await axios.default.get(url);
             resolve(response.data.toString());
         });
     }
 
-    public static replaceNull(obj: PhotoModel): PhotoModel {
+    private static replaceNull(obj: PhotoModel): PhotoModel {
         Object.keys(obj).forEach(key => {
             obj['title'] = obj['title'].replace(/'/g, "");
             obj['ownername'] = obj['ownername'].replace(/'/g, "");
@@ -54,7 +53,7 @@ export class FlickrAPI {
         return obj;
     }
 
-    public static addInsertationDate(obj: PhotoModel): PhotoModel{        
+    private static addInsertationDate(obj: PhotoModel): PhotoModel{        
         obj['date_entered'] = moment().unix();
         return obj;
     }

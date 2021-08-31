@@ -34,7 +34,7 @@ services:
     restart: always
     # volumes:
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/1-init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       # - ./data/postgres:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=supersecret

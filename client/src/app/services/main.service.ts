@@ -31,15 +31,19 @@ export class MainService {
     });
   }
 
-  public async getNewPointsOfInterest() {
+  public async getNewPointsOfInterest(): Promise<void> {
     try {
-      const result = await this._http.post(this._actionUrl + 'newPOI', 'qwerrr').toPromise();
+      await this._http.post(this._actionUrl + 'newPOI', 'qwerrr').toPromise();
     } catch (err) {
       console.log(err);
     }
   }
 
-  public getUploadTime(uploadDate: number) {
+  public getUploadTime(uploadDate: number): Date {
     return new Date(uploadDate * 1000);
+  }
+
+  public async saveProgress() {
+    await this._http.post(this._actionUrl + 'progress', '').toPromise();
   }
 }

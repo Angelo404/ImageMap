@@ -25,18 +25,15 @@ export class MainComponent implements OnInit {
     }).setView([51.505, -0.09], 13);
     this._markerLayer = L.layerGroup().addTo(this._map);
 
-    L.tileLayer(`https://api.tiles.mapbox.com/v4/${this._mapDefaultType}/{z}/{x}/{y}.png?access_token=${this._token}`, {
+    L.tileLayer(`https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?access_token=${this._token}`, {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this._map);
 
-    // const tmpPop = L.popup().setContent(`<h1>asdf</h1>`);
-
-    // L.marker([51.5, -0.09]).addTo(this._map); // .bindPopup(tmpPop)
-
     this._map.on('moveend', this.viewChange.bind(this));
+    this.viewChange();
   }
 
-  public async viewChange() {
+  private async viewChange() {
     const bounds = this._map.getBounds();
     this._markerLayer.clearLayers();
     const cordinates = {'East': bounds.getEast(), 'West': bounds.getWest(), 'North': bounds.getNorth(), 'South': bounds.getSouth()};
@@ -44,8 +41,7 @@ export class MainComponent implements OnInit {
     this.addPointsToMap(this._pointsOfInterest);
   }
 
-  public async addPointsToMap(entries: Array<object>) {
-    // const tmpPop = L.popup().setContent(`<h1>asdf</h1>`);
+  private async addPointsToMap(entries: Array<object>) {
     this._imagesOnScreen = entries.length;
     await entries.forEach(entry => {
       L.marker([entry['latitude'], entry['longitude']]).addTo(this._markerLayer)
@@ -60,11 +56,11 @@ export class MainComponent implements OnInit {
     });
   }
 
-  public async getNew() {
-    const result = this._service.getNewPointsOfInterest();
-    console.log(result);
+  private async getNew() {
+    await this._service.getNewPointsOfInterest();
   }
 
-
-
+  private async saveProgress() {
+    await this._service.saveProgress();
+  }
 }

@@ -45,8 +45,7 @@ exports.route = function (options) {
             wildcards: []
         };
 
-        for (let i = 0; i < settings.origin.length; ++i) {
-            const origin = settings.origin[i];
+        for (const origin of settings.origin) {
             if (origin.indexOf('*') !== -1) {
                 settings._origin.wildcards.push(new RegExp('^' + Hoek.escapeRegex(origin).replace(/\\\*/g, '.*').replace(/\\\?/g, '.') + '$'));
             }
@@ -80,7 +79,16 @@ exports.handler = function (server) {
         return;
     }
 
-    const route = new Route({ method: '_special', path: '/{p*}', handler: internals.handler }, server, { special: true });
+    const definition = {
+        method: '_special',
+        path: '/{p*}',
+        handler: internals.handler,
+        options: {
+            cors: false
+        }
+    };
+
+    const route = new Route(definition, server, { special: true });
     server._core.router.special('options', route);
 };
 
@@ -159,7 +167,9 @@ exports.headers = function (request) {
         response.vary('origin');
     }
 
-    if (!request.info.cors.isOriginMatch) {
+    if ((request.info.cors && !request.info.cors.isOriginMatch) ||                          // After route lookup
+        !exports.matchOrigin(request.headers.origin, request.route.settings.cors)) {        // Response from onRequest
+
         return;
     }
 
@@ -191,8 +201,8 @@ exports.matchOrigin = function (origin, settings) {
         return true;
     }
 
-    for (let i = 0; i < settings._origin.wildcards.length; ++i) {
-        if (origin.match(settings._origin.wildcards[i])) {
+    for (const wildcard of settings._origin.wildcards) {
+        if (origin.match(wildcard)) {
             return true;
         }
     }

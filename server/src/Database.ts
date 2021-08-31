@@ -1,32 +1,30 @@
 import * as pg from 'pg';
+import * as fastcsv from 'fast-csv';
+import * as fs from 'fs';
 
 export class Database {
 
     private connString: string;
     private static client: pg.Client;
+    private static conn: pg.Connection;
 
     constructor() {
-        this.connString = 'postgres://username:supersecret@database_1/dbname';
-    }
-
-    public async initDB(initString: string) {
+        this.connString = 'postgres://username:supersecret@database/dbname';
         Database.client = new pg.Client(this.connString);
-
-        try {
-            await Database.client.connect();
-        } catch (err) {
-            console.log(err);
-        }
-
-        try {
-            await Database.client.query(initString);
-        } catch (err) {
-            console.log(err);
-        }
+        Database.conn = new pg.Connection({connectionString: this.connString});
     }
+
+    // public async connect() {
+    //     try {
+    //         await Database.client.connect();
+    //         await Database
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // }
 
     public async insertMany(data?: Array<object>, table?: string) {
-
+        await this.connect()
         data.forEach(async (entry) => {
             try {
                 await Database.client.query(this.createInsertString(entry, table))
@@ -51,14 +49,27 @@ export class Database {
     }
 
     public async getMany(query: string): Promise<Array<object>> {
+        Database.conn = new pg.Connection({connectionString: this.connString});
+        console.log(Database.conn.query(query));
         return new Promise<Array<object>>(async (resolve, reject) => {
             try {
-                const results = await Database.client.query(query);
-                resolve(results.rows);
+                // const results = Database.conn.query(query);
+                resolve([]);
             } catch (err) {
                 console.log(err)
                 reject(err);
             }
         });
+    }
+
+    public async toCSV() {
+        console.log('!!!!');
+        const results = await Database.client.query(`SELECT * FROM FLICKR`);
+        const ws = fs.createWriteStream("sample_table.csv");
+        fastcsv.write(results.rows, { headers: true }).on('finish', function() {console.log('Writing to csv')}).pipe(ws);
+    }
+
+    public fromCSV() {
+
     }
 }

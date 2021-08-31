@@ -1,4 +1,4 @@
-// Type definitions for request 2.47
+// Type definitions for request 2.48
 // Project: https://github.com/request/request
 // Definitions by: Carlos Ballesteros Velasco <https://github.com/soywiz>,
 //                 bonnici <https://github.com/bonnici>,
@@ -7,6 +7,8 @@
 //                 Christopher Currens <https://github.com/ccurrens>,
 //                 Jon Stevens <https://github.com/lookfirst>,
 //                 Matt R. Wilson <https://github.com/mastermatt>
+//                 Jose Colella <https://github.com/josecolella>
+//                 Marek Urbanowicz <https://github.com/murbanowicz>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.3
 
@@ -23,6 +25,7 @@ import FormData = require('form-data');
 import net = require('net');
 import tough = require('tough-cookie');
 import { Url } from 'url';
+import { SecureContextOptions } from 'tls';
 
 declare namespace request {
     interface RequestAPI<TRequest extends Request, TOptions extends CoreOptions, TUriUrlOptions> {
@@ -131,7 +134,7 @@ declare namespace request {
         jsonReplacer?: (key: string, value: any) => any;
         multipart?: RequestPart[] | Multipart;
         agent?: http.Agent | https.Agent;
-        agentOptions?: any;
+        agentOptions?: http.AgentOptions | https.AgentOptions;
         agentClass?: any;
         forever?: any;
         host?: string;
@@ -139,13 +142,14 @@ declare namespace request {
         method?: string;
         headers?: Headers;
         body?: any;
+        family?: 4 | 6;
         followRedirect?: boolean | ((response: http.IncomingMessage) => boolean);
         followAllRedirects?: boolean;
         followOriginalHttpMethod?: boolean;
         maxRedirects?: number;
         removeRefererHeader?: boolean;
         encoding?: string | null;
-        pool?: any;
+        pool?: PoolOptions;
         timeout?: number;
         localAddress?: string;
         proxy?: any;
@@ -179,6 +183,8 @@ declare namespace request {
     type OptionsWithUrl = UrlOptions & CoreOptions;
     type Options = OptionsWithUri | OptionsWithUrl;
 
+    type MultipartBody = string | Buffer | ArrayBuffer | Uint8Array;
+
     type RequestCallback = (error: any, response: Response, body: any) => void;
 
     interface HttpArchiveRequest {
@@ -191,6 +197,12 @@ declare namespace request {
         };
     }
 
+    interface ExtraPoolOptions {
+        maxSockets?: number;
+    }
+
+    type PoolOptions = false | { [key: string]: http.Agent | https.Agent } & ExtraPoolOptions | ExtraPoolOptions;
+
     interface NameValuePair {
         name: string;
         value: string;
@@ -200,7 +212,7 @@ declare namespace request {
         chunked?: boolean;
         data?: Array<{
             'content-type'?: string,
-            body: string
+            body: MultipartBody
         }>;
     }
 
@@ -274,7 +286,7 @@ declare namespace request {
         // set in `Request.prototype.init`
         headers: Headers;
         method: string;
-        pool: false | { [key: string]: http.Agent | https.Agent };
+        pool: PoolOptions;
         dests: stream.Readable[];
         callback?: RequestCallback;
         uri: Url & { href: string, pathname: string };

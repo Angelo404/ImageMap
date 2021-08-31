@@ -41,8 +41,7 @@ exports.send = async function (request) {
 
 internals.marshal = async function (request) {
 
-    for (let i = 0; i < request._route._marshalCycle.length; ++i) {
-        const func = request._route._marshalCycle[i];
+    for (const func of request._route._marshalCycle) {
         const result = func(request);
         if (result && typeof result.then === 'function') {      // Skip await if no reason to
             await result;
@@ -301,6 +300,9 @@ internals.end = function (env, event, err) {
         }
 
         request._log(event ? ['response', 'error', event] : ['response', 'error'], err);
+    }
+    else {
+        request._transmitted = true;
     }
 
     team.attend();

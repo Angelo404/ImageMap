@@ -22,14 +22,14 @@ interface Cookies {
      * Cookie header in the request. If such a cookie exists,
      * its value is returned. Otherwise, nothing is returned.
      */
-    get(name: string, opts?: Cookies.GetOption): string;
+    get(name: string, opts?: Cookies.GetOption): string | undefined;
 
     /**
      * This sets the given cookie in the response and returns
      * the current context to allow chaining.If the value is omitted,
      * an outbound header with an expired date is used to delete the cookie.
      */
-    set(name: string, value?: string, opts?: Cookies.SetOption): this;
+    set(name: string, value?: string | null, opts?: Cookies.SetOption): this;
 }
 
 declare namespace Cookies {
@@ -87,7 +87,7 @@ declare namespace Cookies {
          * a boolean or string indicating whether the cookie is a "same site" cookie (false by default).
          * This can be set to 'strict', 'lax', or true (which maps to 'strict').
          */
-        sameSite?: 'strict' | 'lax' | boolean;
+        sameSite?: 'strict' | 'lax' | 'none' | boolean;
         /**
          * a boolean indicating whether the cookie is to be signed (false by default).
          * If this is true, another cookie of the same name with the .sig suffix
@@ -134,7 +134,6 @@ interface CookiesFunction {
     /**
      * "options" array of key strings is deprecated, provide using options {"keys": keygrip}
      */
-    // tslint:disable-next-line:unified-signatures
     (request: IncomingMessage, response: ServerResponse, options: string[]): Cookies;
     /**
      * "options" instance of Keygrip is deprecated, provide using options {"keys": keygrip}
@@ -146,7 +145,6 @@ interface CookiesFunction {
     /**
      * "options" array of key strings is deprecated, provide using options {"keys": keygrip}
      */
-    // tslint:disable-next-line:unified-signatures
     new (request: IncomingMessage, response: ServerResponse, options: string[]): Cookies;
     /**
      * "options" instance of Keygrip is deprecated, provide using options {"keys": keygrip}
